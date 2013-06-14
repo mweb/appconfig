@@ -1,4 +1,4 @@
 appconfig
 =========
 
-Python module to simply fly the usage of config files.
+Python module to simplify the usage of config files.
