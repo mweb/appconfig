@@ -31,12 +31,28 @@
         <h1>
 <a name="appconfig" class="anchor" href="#appconfig"><span class="octicon octicon-link"></span></a>appconfig</h1>
 
-<p><code>appconfig</code> is a python module that simplifies the usage of ini based config files. It uses the Python ConfigParser module. The advantage of the <code>appconfig</code> module it that it allows defining default values for all config parameters and to provide a description of each parameter. While writing the config file back it will add comments above all of the config values and since we have default values we never need to check if a value is defined.</p>
+<p><code>appconfig</code> is a python module that simplifies the usage of ini based config
+files. It uses the Python ConfigParser module. The advantage of the appconfig
+module it that it allows defining default values for all config parameters and
+to provide a description of each parameter. While writing the config file back
+it will add comments above all of the config values and since we have default
+values we never need to check if a value is defined.</p>
 
 <h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<p>The <code>appconfig</code> module offers the following features:</p>
+
+<ul>
+<li>default values for config values</li>
+<li>config file generation with parameter description</li>
+<li>automatic type conversion and type checks for config values</li>
+<li>config directory handling</li>
+</ul><h2>
 <a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
-<p>TODO</p>
+<pre><code>pip install appconfig
+</code></pre>
 
 <h3>
 <a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h3>
@@ -50,14 +66,185 @@
 <ul>
 <li><a href="https://nose.readthedocs.org/en/latest/">nose</a></li>
 </ul><h2>
-<a name="example-config-file" class="anchor" href="#example-config-file"><span class="octicon octicon-link"></span></a>Example Config file</h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
 
-<p>TODO</p>
+<h3>
+<a name="example-config-file" class="anchor" href="#example-config-file"><span class="octicon octicon-link"></span></a>Example Config File</h3>
+
+<p>The config files that the user will use for your application will have the ini
+format. For the application it self it is necessary to create a config file
+with json content that allows to set the default values and the documentation
+for all keys.</p>
+
+<p><strong>Example JSON File</strong></p>
+
+<pre><code>{
+    "application_name": "appconfig_test",
+    "application_author": "python",
+    "application_version": "1.0",
+    "appconfig": {
+        "first": {
+            "default": 1,
+            "description": "the first parameter",
+            "type": "int"
+        }
+    }
+}
+</code></pre>
+
+<p>This will lead to the following user config file:</p>
+
+<p><strong>Example ini config File</strong></p>
+
+<pre><code>[appconfig]
+# the first paramter 
+# Type: [int]
+# first = 1
+fisrt = 10
+</code></pre>
 
 <h2>
 <a name="example-usage" class="anchor" href="#example-usage"><span class="octicon octicon-link"></span></a>Example Usage</h2>
 
-<p>TODO</p>
+<p>With the application and the user config from above a simple python
+application might look like these:</p>
+
+<pre><code>#!/bin/env python
+
+from appconfig import AppConfig
+
+
+def main():
+    """ The main method to be run.
+    """
+    conf = AppConfig()
+    conf.init_default_config('example.json')
+    conf.load('example.conf')
+
+    value = conf.get_s('appconfig', 'first')
+    print value
+    print type(value)
+
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+
+<h2>
+<a name="application-config-format" class="anchor" href="#application-config-format"><span class="octicon octicon-link"></span></a>Application Config Format</h2>
+
+<p>The application config format is a simple config file with json syntax it
+requires at least the application_name to be defined and one json object 
+(config section) with at least one parameter defined.</p>
+
+<pre><code>{
+    "application_name": "appconfig_test",
+    "application_author": "python",
+    "application_version": "1.0",
+    "appconfig": {
+        "first": {
+            "default": 1,
+            "description": "the first parameter",
+            "type": "int"
+        }
+    }
+}
+</code></pre>
+
+<ul>
+<li>
+<strong>application_name</strong> Defines the application name for the application using
+this config file. The application name is used to access the global and
+the user local config files. (See Config File Location)</li>
+<li>
+<strong>application_author</strong> Defines the name of the author of the application.
+This name is used to access the user config file on Windows (See Config 
+File Location)</li>
+<li>
+<strong>application_version</strong> Defines the application version to separate
+different versions of the config file to support multiple versions of the
+same application on one system. (See Config File Location)</li>
+<li>
+<strong>appconfig</strong> Defines a section named <code>appconfig</code> The section name can be
+almost any name. Only the <code>application_*</code> keywords and the name hidden
+are prohibited since they are used from the library. It is possible to
+have multiple sections.</li>
+</ul><p>A section consists out of at least one parameter. Each parameter must be a json
+object with the following three parameter defined:</p>
+
+<ul>
+<li>
+<strong>default</strong> This defines the default value that is used if the value is not
+set by the user.</li>
+<li>
+<strong>description</strong> Describes the parameter</li>
+<li>
+<strong>type</strong> Defines the type that this parameter gets converted to (see 
+Supported Types)</li>
+</ul><h3>
+<a name="config-file-location" class="anchor" href="#config-file-location"><span class="octicon octicon-link"></span></a>Config File Location</h3>
+
+<p>The load_default function tries to load config files from different locations.
+The first location it tries is the global config directory:</p>
+
+<p><strong>Mac OS X</strong></p>
+
+<pre><code>/Library/Application Support/APPNAME/APPNAME.conf
+</code></pre>
+
+<p><strong>Linux</strong></p>
+
+<pre><code>/etc/xdg/APPNAME/APPNAME.conf
+</code></pre>
+
+<p><strong>Windows 7</strong></p>
+
+<pre><code>?
+</code></pre>
+
+<p>The second location is the users home directory where the local config files
+are store.</p>
+
+<p><strong>Mac OS X</strong></p>
+
+<pre><code>/Users/USERNAME/Library/Application Support/APPNAME/APPNAME.conf
+</code></pre>
+
+<p><strong>Linux</strong></p>
+
+<pre><code>/home/USERSNAME/.config/APPNAME/APPNAME.conf
+</code></pre>
+
+<p><strong>Windows</strong></p>
+
+<pre><code>C:\Users\USERNAME\AppData\Local\AUTHOR\APPNAME\APPNAME.conf
+</code></pre>
+
+<p>If both file exist they will be loaded in this order and the user config file
+will override values from the global config file.</p>
+
+<p>If the application version is specified then the application version will be
+added to the path after the application name. This allows a per-version
+isolation of the config files.</p>
+
+<p>The <code>save</code> saves a config file if no config file is specified it will try to
+use the user default location or the location configured within the section
+<code>APPNAME</code> config value <code>config_file</code>.</p>
+
+<h3>
+<a name="suported-types" class="anchor" href="#suported-types"><span class="octicon octicon-link"></span></a>Suported Types</h3>
+
+<p>Currently the following types are supported for a config value:</p>
+
+<ul>
+<li><code>str</code></li>
+<li><code>unicode</code></li>
+<li><code>int</code></li>
+<li><code>float</code></li>
+<li><code>bool</code></li>
+</ul><p>All the types will be converted with python functions. The only exception is
+the <code>bool</code> type. The boolean type uses the RawConfigParser.getboolean function.
+This translates the following string to a true (1, yes, true, on)</p>
       </section>
     </div>
 
