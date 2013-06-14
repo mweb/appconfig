@@ -86,7 +86,7 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
 
             @param section: the section where the key is stored.
             @param key:     the key to get the description for.
-            @return: A tuple with three elements First
+            @return: A tuple with three elements (description, type, default)
         '''
         if section in self.config_description:
             if key in self.config_description[section]:
@@ -197,7 +197,7 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
         ConfigParser.SafeConfigParser.set(self, section, key, str(value))
 
     def save(self, filename=None, verbose=False):
-        ''' Save the config to the given file or the set default location.
+        ''' Save the config to the given file or to given default location.
 
             @param filename: the file to write the config
             @param verbose: If set to true the config file will have all values
