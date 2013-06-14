@@ -26,11 +26,11 @@ pip install appconfig
 
 The following packages are required for using the library:
 
-* [appdirs|https://pypi.python.org/pypi/appdirs]
+* [appdirs](https://pypi.python.org/pypi/appdirs)
 
 To run the unit test the following packages are required:
 
-* [nose|https://nose.readthedocs.org/en/latest/]
+* [nose](https://nose.readthedocs.org/en/latest/)
 
 ## Examples 
 
@@ -99,7 +99,7 @@ if __name__ == '__main__':
 
 The application config format is a simple config file with json syntax it
 requires at least the application_name to be defined and one json object 
-(config section) with at least one paramter defined.
+(config section) with at least one parameter defined.
 
 ```
 {
@@ -122,7 +122,7 @@ requires at least the application_name to be defined and one json object
 * **application_author** Defines the name of the author of the application.
     This name is used to access the user config file on Windows (See Config 
     File Location)
-* **application_version** Defines the application version to seperate
+* **application_version** Defines the application version to separate
     different versions of the config file to support multiple versions of the
     same application on one system. (See Config File Location)
 * **appconfig** Defines a section named `appconfig` The section name can be
@@ -130,12 +130,12 @@ requires at least the application_name to be defined and one json object
     are prohibited since they are used from the library. It is possible to
     have multiple sections.
 
-A section consists out of at least one paramter. Each parameter must be a json
-object with the following three paramters defined:
+A section consists out of at least one parameter. Each parameter must be a json
+object with the following three parameter defined:
 
 * **default** This defines the default value that is used if the value is not
     set by the user.
-* **description** Describes the paramter
+* **description** Describes the parameter
 * **type** Defines the type that this parameter gets converted to (see 
     Supported Types)
 
@@ -190,15 +190,14 @@ use the user default location or the location configured within the section
 
 ### Suported Types
 
-Currently the following types are uspported for a config value:
+Currently the following types are supported for a config value:
 
 * `str`
 * `unicode`
 * `int`
 * `float`
-* `bool` 
+* `bool`
 
 All the types will be converted with python functions. The only exception is
 the `bool` type. The boolean type uses the RawConfigParser.getboolean function.
 This translates the following string to a true (1, yes, true, on)
-
