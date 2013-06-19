@@ -18,7 +18,7 @@ setup(name='appconfig',
         long_description=README + '\n\n' + CHANGES,
         classifiers=[
             "Programming Language :: Python",
-            "Topic :: ",
+            "Topic :: Software Development :: Libraries :: Python Modules",
             ],
         author='Mathias Weber',
         author_email='mathew.weber@gmail.com',
