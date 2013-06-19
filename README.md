@@ -1,4 +1,5 @@
-# appconfig
+appconfig
+=========
 
 `appconfig` is a python module that simplifies the usage of ini based config
 files. It uses the Python ConfigParser module. The advantage of the appconfig
@@ -7,7 +8,8 @@ to provide a description of each parameter. While writing the config file back
 it will add comments above all of the config values and since we have default
 values we never need to check if a value is defined.
 
-## Features
+Features
+--------
 
 The `appconfig` module offers the following features:
 
