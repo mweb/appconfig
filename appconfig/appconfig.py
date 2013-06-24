@@ -138,9 +138,9 @@ class AppConfig(configparser.ConfigParser):
             #print 'Could not load config file [%s]' % (filename)
             raise AppConfigValueException('Could not load config file {0}'.
                     format(filename))
-        fob = open(filename)
-        self.read_file(fob)
-        fob.close()
+        cfl = open(filename)
+        self.read_file(cfl)
+        cfl.close()
 
     def get(self, section, key):
         ''' Get the value of a key in the given section. It will automatically
