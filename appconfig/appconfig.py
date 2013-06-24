@@ -138,7 +138,7 @@ class AppConfig(configparser.ConfigParser):
             #print 'Could not load config file [%s]' % (filename)
             raise AppConfigValueException('Could not load config file {0}'.
                     format(filename))
-        cfl = open(filename)
+        cfl = open(filename, 'r')
         self.read_file(cfl)
         cfl.close()
 
