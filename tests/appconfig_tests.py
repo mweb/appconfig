@@ -104,6 +104,63 @@ class TestAppConfig(unittest.TestCase):
                 "G'Gugvunnts and Vl'hurgs", bool, False, False)
 
     def test_save_default_config(self):
+        ''' Test the save functionality with a default config file '''
+        config = AppConfig()
+        config.init_default_config(os.path.join(self.config_dir,
+                'test_data.txt'))
+
+        config.save()
+        # read the generated default output file (only three sections expected
+        # nothing else should be in here since we haven't changed one value.
+        # but added the default config file
+        sections, values, comments = \
+                self._parse_config_file(config.get(config.application_name,
+                        'config_file'))
+        self.assertTrue(sections == 3)
+        self.assertTrue(values == 0)
+        self.assertTrue(comments == 0)
+
+        config.save(verbose=True)
+        # search the verbose file with 3 lines of comment for each entry
+        sections, values, comments = \
+                self._parse_config_file(config.get(config.application_name,
+                        'config_file'))
+        self.assertTrue(sections == 3)
+        self.assertTrue(values == 0)
+        self.assertTrue(comments == 34)
+
+        config.set('client', 'first', 42)
+        config.set('client', 'second', 42)
+        config.set('server', 'first', 42)
+        config.set('server', 'second', 42)
+        config.save()
+
+        config.save()
+        # read the config file after two value for each section where set
+        sections, values, comments = \
+                self._parse_config_file(config.get(config.application_name,
+                        'config_file'))
+        self.assertTrue(sections == 3)
+        self.assertTrue(values == 4)
+        self.assertTrue(comments == 0)
+
+        config.save(verbose=True)
+        # search the verbose file with 3 lines of comment for each entry and
+        # some value where set with a none standard value
+        sections, values, comments = \
+                self._parse_config_file(config.get(config.application_name,
+                        'config_file'))
+        self.assertTrue(sections == 3)
+        self.assertTrue(values == 4)
+        self.assertTrue(comments == 34)
+
+        # load default config
+        config.load_default()
+        self.assertTrue(config.get('client', 'first') == "42")
+
+        os.remove(config.get(config.application_name, 'config_file'))
+
+    def test_save_config(self):
         ''' Test the save functionality of the config module '''
         config = AppConfig()
         config.init_default_config(os.path.join(self.config_dir,
