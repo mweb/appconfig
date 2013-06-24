@@ -160,13 +160,13 @@ class TestAppConfig(unittest.TestCase):
 
         # tests without default config loaded
         config.set('client', 'first', 12)
-        value = config.get_s('client', 'first')
+        value = config.get('client', 'first')
         self.assertTrue(type(value) == str)
         # this is a string since we don't now anything about it
         self.assertTrue(value == '12')
 
         config.set('client', 'third', -16)
-        value = config.get_s('client', 'third')
+        value = config.get('client', 'third')
         self.assertTrue(type(value) == str)
         # this is a string since we don't now anything about it
         self.assertTrue(value == '-16')
@@ -334,7 +334,7 @@ class TestAppConfig(unittest.TestCase):
             @param edefault: Expected default value
             @param evalue: Expected value
         '''
-        value = config.get_s(section, key)
+        value = config.get(section, key)
         self.assertTrue(type(value) == etype)
         self.assertTrue(value == evalue)
         desc, ctype, default = config.get_description(section, key)

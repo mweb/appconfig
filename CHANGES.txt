@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.2
+---
+
+* rename get_s function to get
+
 0.1 (2013-06-19)
 ----------------
 

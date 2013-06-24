@@ -138,7 +138,7 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
             return
         self.readfp(open(filename))
 
-    def get_s(self, section, key):
+    def get(self, section, key):
         ''' Get the value of a key in the given section. It will automatically
             translate the paramter type if the parameter has a type specified
             with the description.
@@ -152,11 +152,14 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
         section = section.lower()
         key = key.lower()
         descr, value_type, default = self.get_description(section, key)
+        value = ConfigParser.SafeConfigParser.get(self, section, key)
         if value_type == bool:
-            return self.getboolean(section, key)
+            if value.lower() not in self._boolean_states:
+                raise AppConfigValueException('Not a boolean: {0}'.
+                        format(value))
+            return self._boolean_states[value.lower()]
 
-        return value_type(ConfigParser.SafeConfigParser.get(self, section,
-                key))
+        return value_type(value)
 
     def set(self, section, key, value):
         ''' Set the value for a key in the given section. It will check the
@@ -269,9 +272,9 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
                     desc.append(_format_message(descr, 78, "# "))
                     desc.append("# Type: [{0}]".format(str(value_type)))
                     desc.append("# {0}={1}".format(key, default))
-                if not self.get_s(section, key) == default:
+                if not self.get(section, key) == default:
                     desc.append('{0}={1}'.format(key,
-                        self.get_s(section, key)))
+                        self.get(section, key)))
                 if verbose:
                     desc.append("")
 
