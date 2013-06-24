@@ -29,7 +29,7 @@ class AppConfigValueException(BaseException):
     ''' The exception thrown if a problem within the Config object occures. '''
 
 
-class AppConfig(object, ConfigParser.SafeConfigParser):
+class AppConfig(ConfigParser.SafeConfigParser):
     ''' This handles config files. The config files have the following
         structure:
         [SECTIONNAME]
