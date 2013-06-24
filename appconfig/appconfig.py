@@ -68,6 +68,7 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
                     'not exist. ({0})'.format(path))
         cfl = open(path, 'r')
         data = json.load(cfl)
+        cfl.close()
         for key in data.iterkeys():
             if 'application_name' == key:
                 self.application_name = data[key].lower()
@@ -137,7 +138,9 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
             #print 'Could not load config file [%s]' % (filename)
             raise AppConfigValueException('Could not load config file {0}'.
                     format(filename))
-        self.readfp(open(filename))
+        cfl = open(filename, 'r')
+        self.readfp(cfl)
+        cfl.close()
 
     def get(self, section, key):
         ''' Get the value of a key in the given section. It will automatically
@@ -242,6 +245,7 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
 
         cfp = open(filename, 'w')
         self._write_config(cfp, verbose)
+        cfp.close()
 
         if hidden is not None:
             for key, value in hidden:

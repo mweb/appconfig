@@ -61,6 +61,7 @@ class TestAppConfig(unittest.TestCase):
                         "description": "The hidden password"}}}
         dfd = open(os.path.join(self.config_dir, 'test_data.txt'), 'w')
         dfd.write(json.dumps(data))
+        dfd.close()
 
     def tearDown(self):
         ''' Remove temporary files '''
@@ -442,4 +443,5 @@ class TestAppConfig(unittest.TestCase):
                 comments += 1
             elif len(line.split('=')) == 2:
                 values += 1
+        cfl.close()
         return sections, values, comments
