@@ -26,6 +26,7 @@ setup(name='appconfig',
         license='BSD',
         url='http://mweb.github.io/appconfig',
         test_suite='nose.collector',
+        use_2to3 = True,
         packages=find_packages(),
         install_requires=requires,
         tests_require=tests_requires)
