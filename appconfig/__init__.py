@@ -1,1 +1,1 @@
-from appconfig import AppConfig, AppConfigValueException
+from .appconfig import AppConfig, AppConfigValueException

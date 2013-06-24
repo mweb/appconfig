@@ -61,6 +61,7 @@ class TestAppConfig(unittest.TestCase):
                         "description": "The hidden password"}}}
         dfd = open(os.path.join(self.config_dir, 'test_data.txt'), 'w')
         dfd.write(json.dumps(data))
+        dfd.close()
 
     def tearDown(self):
         ''' Remove temporary files '''
@@ -83,7 +84,7 @@ class TestAppConfig(unittest.TestCase):
 
         self._check_value(config, 'client', 'first', 'Aldebarans', str,
                 'Start', 'Start')
-        self._check_value(config, 'client', 'second', 'Altairians', unicode,
+        self._check_value(config, 'client', 'second', 'Altairians', str,
                 'Stop', 'Stop')
         self._check_value(config, 'client', 'third', 'Amoeboid Zingatularians',
                 int, 12, 12)
@@ -95,7 +96,7 @@ class TestAppConfig(unittest.TestCase):
         self._check_value(config, 'server', 'first', 'Betelgeusians', str,
                 'End', 'End')
         self._check_value(config, 'server', 'second', 'Blagulon Kappans',
-                unicode, 'Accelerate', 'Accelerate')
+                str, 'Accelerate', 'Accelerate')
         self._check_value(config, 'server', 'third', 'Dentrassis', int, -12,
                 -12)
         self._check_value(config, 'server', 'forth', 'Dolphins', float, 3.3333,
@@ -267,7 +268,7 @@ class TestAppConfig(unittest.TestCase):
         self._check_value(config, 'client', 'first', 'Aldebarans', str,
                 'Start', "112")
         config.set('client', 'second', 12.45)
-        self._check_value(config, 'client', 'second', 'Altairians', unicode,
+        self._check_value(config, 'client', 'second', 'Altairians', str,
                 'Stop', '12.45')
         config.set('client', 'third', -166)
         self._check_value(config, 'client', 'third',
@@ -301,7 +302,7 @@ class TestAppConfig(unittest.TestCase):
                 'End', 'True')
         config.set('server', 'second', "Arther Dent")
         self._check_value(config, 'server', 'second', 'Blagulon Kappans',
-                unicode, 'Accelerate', 'Arther Dent')
+                str, 'Accelerate', 'Arther Dent')
         config.set('server', 'third', 42)
         self._check_value(config, 'server', 'third', 'Dentrassis', int, -12,
                 42)
@@ -442,4 +443,5 @@ class TestAppConfig(unittest.TestCase):
                 comments += 1
             elif len(line.split('=')) == 2:
                 values += 1
+        cfl.close()
         return sections, values, comments
