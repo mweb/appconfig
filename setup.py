@@ -13,7 +13,7 @@ tests_requires = ['nose',
         ]
 
 setup(name='appconfig',
-        version='0.1',
+        version='0.2dev',
         description='An easy to use config file wrapper.',
         long_description=README + '\n\n' + CHANGES,
         classifiers=[
