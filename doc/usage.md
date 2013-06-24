@@ -86,7 +86,7 @@ def main():
     conf.init_default_config('example.json')
     conf.load('example.conf')
 
-    value = conf.get_s('appconfig', 'first')
+    value = conf.get('appconfig', 'first')
     print value
     print type(value)
 
