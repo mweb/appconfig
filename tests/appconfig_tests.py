@@ -154,6 +154,30 @@ class TestAppConfig(unittest.TestCase):
         self.assertTrue(values == 4)
         self.assertTrue(comments == 30)
 
+    def test_load_config(self):
+        ''' test the config file loader '''
+        tmp_config_file = os.path.join(self.config_dir, 'test_load_config.txt')
+        config = AppConfig()
+        config.init_default_config(os.path.join(self.config_dir,
+                'test_data.txt'))
+
+        f = open(tmp_config_file, 'w')
+        f.write('[client]\n')
+        f.write('first = The End\n')
+        f.write('third = 1337\n')
+        f.close()
+
+        config.load(tmp_config_file)
+
+        self._check_value(config, 'client', 'first', 'Aldebarans', str,
+                'Start', 'The End')
+        self._check_value(config, 'client', 'third', 'Amoeboid Zingatularians',
+                int, 12, 1337)
+        os.remove(tmp_config_file)
+
+        with self.assertRaises(AppConfigValueException):
+            config.load(tmp_config_file)
+
     def test_set_config(self):
         ''' Test seting and getting values from the config object '''
         config = AppConfig()

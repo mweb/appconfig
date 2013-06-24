@@ -135,7 +135,6 @@ class AppConfig(object, ConfigParser.SafeConfigParser):
             #print 'Could not load config file [%s]' % (filename)
             raise AppConfigValueException('Could not load config file {0}'.
                     format(filename))
-            return
         self.readfp(open(filename))
 
     def get(self, section, key):
