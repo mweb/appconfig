@@ -123,7 +123,7 @@ class AppConfig(ConfigParser.SafeConfigParser):
                 self.application_name.lower()))
         if os.path.exists(file_name):
             self.load(file_name)
-        if os.getuid() > 0:
+        if os.name is not 'posix' or os.getuid() > 0:
             config_file = os.path.join(appdir.user_data_dir, '{0}.conf'.format(
                     self.application_name.lower()))
             if os.path.exists(config_file):
