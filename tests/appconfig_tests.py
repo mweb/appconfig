@@ -6,7 +6,7 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, 
+# 1. Redistributions of source code must retain the above copyright notice,
 #    this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
@@ -32,7 +32,7 @@ import tempfile
 import shutil
 import os.path
 
-from appconfig import AppConfig, AppConfigValueException
+from appconfig import AppConfig, AppConfigValueException, PY2
 
 
 class TestAppConfig(unittest.TestCase):
@@ -92,8 +92,12 @@ class TestAppConfig(unittest.TestCase):
 
         self._check_value(config, 'client', 'first', 'Aldebarans', str,
                 'Start', 'Start')
-        self._check_value(config, 'client', 'second', 'Altairians', unicode,
-                'Stop', 'Stop')
+        if PY2:
+            self._check_value(config, 'client', 'second', 'Altairians',
+                    unicode, 'Stop', 'Stop')
+        else:
+            self._check_value(config, 'client', 'second', 'Altairians',
+                    str, 'Stop', 'Stop')
         self._check_value(config, 'client', 'third', 'Amoeboid Zingatularians',
                 int, 12, 12)
         self._check_value(config, 'client', 'forth', 'Bartledanians', float,
@@ -103,8 +107,12 @@ class TestAppConfig(unittest.TestCase):
 
         self._check_value(config, 'server', 'first', 'Betelgeusians', str,
                 'End', 'End')
-        self._check_value(config, 'server', 'second', 'Blagulon Kappans',
-                unicode, 'Accelerate', 'Accelerate')
+        if PY2:
+            self._check_value(config, 'server', 'second', 'Blagulon Kappans',
+                    unicode, 'Accelerate', 'Accelerate')
+        else:
+            self._check_value(config, 'server', 'second', 'Blagulon Kappans',
+                    str, 'Accelerate', 'Accelerate')
         self._check_value(config, 'server', 'third', 'Dentrassis', int, -12,
                 -12)
         self._check_value(config, 'server', 'forth', 'Dolphins', float, 3.3333,
@@ -276,8 +284,12 @@ class TestAppConfig(unittest.TestCase):
         self._check_value(config, 'client', 'first', 'Aldebarans', str,
                 'Start', "112")
         config.set('client', 'second', 12.45)
-        self._check_value(config, 'client', 'second', 'Altairians', unicode,
-                'Stop', '12.45')
+        if PY2:
+            self._check_value(config, 'client', 'second', 'Altairians',
+                    unicode, 'Stop', '12.45')
+        else:
+            self._check_value(config, 'client', 'second', 'Altairians',
+                    str, 'Stop', '12.45')
         config.set('client', 'third', -166)
         self._check_value(config, 'client', 'third',
                 'Amoeboid Zingatularians', int, 12, -166)
@@ -309,8 +321,12 @@ class TestAppConfig(unittest.TestCase):
         self._check_value(config, 'server', 'first', 'Betelgeusians', str,
                 'End', 'True')
         config.set('server', 'second', "Arther Dent")
-        self._check_value(config, 'server', 'second', 'Blagulon Kappans',
-                unicode, 'Accelerate', 'Arther Dent')
+        if PY2:
+            self._check_value(config, 'server', 'second', 'Blagulon Kappans',
+                    unicode, 'Accelerate', 'Arther Dent')
+        else:
+            self._check_value(config, 'server', 'second', 'Blagulon Kappans',
+                    str, 'Accelerate', 'Arther Dent')
         config.set('server', 'third', 42)
         self._check_value(config, 'server', 'third', 'Dentrassis', int, -12,
                 42)

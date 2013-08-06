@@ -7,6 +7,7 @@ Changelog
 * rename get_s function to get
 * improved test coverage
 * fix for load_default on windows
+* added compatibility for Python 3.x
 
 0.1 (2013-06-19)
 ----------------

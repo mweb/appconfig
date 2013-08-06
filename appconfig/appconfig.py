@@ -6,7 +6,7 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, 
+# 1. Redistributions of source code must retain the above copyright notice,
 #    this list of conditions and the following disclaimer.
 # 2. Redistributions in binary form must reproduce the above copyright notice,
 #    this list of conditions and the following disclaimer in the documentation
@@ -27,11 +27,21 @@
 ''' This file holds Config class for loading/storing the configuration of the
     Project.
 '''
+import sys
+PY2 = sys.version_info[0] == 2
 
 # python imports
 import os
 import json
-import ConfigParser
+if PY2:
+    from ConfigParser import SafeConfigParser
+
+    ConfigParser = SafeConfigParser
+    string_types = (str, unicode)
+else:
+    import configparser
+    ConfigParser = configparser.ConfigParser
+    string_types = (str,)
 from appdirs import AppDirs
 
 
@@ -39,7 +49,7 @@ class AppConfigValueException(BaseException):
     ''' The exception thrown if a problem within the Config object occures. '''
 
 
-class AppConfig(ConfigParser.SafeConfigParser):
+class AppConfig(ConfigParser):
     ''' This handles config files. The config files have the following
         structure:
         [SECTIONNAME]
@@ -56,7 +66,7 @@ class AppConfig(ConfigParser.SafeConfigParser):
     '''
 
     def __init__(self, translator=None):
-        ConfigParser.SafeConfigParser.__init__(self)
+        ConfigParser.__init__(self)
         self.config_description = {}
         self.application_name = ""
         self.application_author = None
@@ -79,7 +89,7 @@ class AppConfig(ConfigParser.SafeConfigParser):
         cfl = open(path, 'r')
         data = json.load(cfl)
         cfl.close()
-        for key in data.iterkeys():
+        for key in data.keys():
             if 'application_name' == key:
                 self.application_name = data[key].lower()
                 continue
@@ -149,7 +159,10 @@ class AppConfig(ConfigParser.SafeConfigParser):
             raise AppConfigValueException('Could not load config file {0}'.
                     format(filename))
         cfl = open(filename, 'r')
-        self.readfp(cfl)
+        if PY2:
+            self.readfp(cfl)
+        else:
+            self.read_file(cfl)
         cfl.close()
 
     def get(self, section, key):
@@ -166,12 +179,19 @@ class AppConfig(ConfigParser.SafeConfigParser):
         section = section.lower()
         key = key.lower()
         descr, value_type, default = self.get_description(section, key)
-        value = ConfigParser.SafeConfigParser.get(self, section, key)
+        value = ConfigParser.get(self, section, key)
         if value_type == bool:
-            if value.lower() not in self._boolean_states:
-                raise AppConfigValueException('Not a boolean: {0}'.
-                        format(value))
-            return self._boolean_states[value.lower()]
+            if PY2:
+                if value.lower() not in self._boolean_states:
+                    raise AppConfigValueException('Not a boolean: {0}'.
+                            format(value))
+                return self._boolean_states[value.lower()]
+            else:
+                try:
+                    return self._convert_to_boolean(value)
+                except ValueError:
+                    raise AppConfigValueException('Not a boolean: {0}'.
+                            format(value))
 
         return value_type(value)
 
@@ -194,11 +214,11 @@ class AppConfig(ConfigParser.SafeConfigParser):
 
         if value_type != type(value):
             if value_type == bool:
-                if ((type(value) in (str, unicode) and
+                if ((type(value) in string_types and
                         value.lower() in ('true', 't')) or
                         (type(value) == int and value > 0)):
                     value = True
-                elif ((type(value) in (str, unicode) and
+                elif ((type(value) in string_types and
                         value.lower() in ('false', 'f')) or
                         (type(value) == int and value == 0)):
                     value = False
@@ -211,7 +231,7 @@ class AppConfig(ConfigParser.SafeConfigParser):
         if not self.has_section(section):
             self.add_section(section)
 
-        ConfigParser.SafeConfigParser.set(self, section, key, str(value))
+        ConfigParser.set(self, section, key, str(value))
 
     def save(self, filename=None, verbose=False):
         ''' Save the config to the given file or to given default location.
@@ -311,7 +331,7 @@ class AppConfig(ConfigParser.SafeConfigParser):
         if not section in self.config_description:
             self.config_description[section] = {}
 
-        for key, value in parameters.iteritems():
+        for key, value in parameters.items():
             key = key.lower()
             if not ('default' in value and 'type' in value and
                     'description' in value):
@@ -334,7 +354,10 @@ def _get_type(stype):
     if stype == 'str':
         return str
     if stype == 'unicode':
-        return unicode
+        if PY2:
+            return unicode
+        else:
+            return str
     if stype == 'int':
         return int
     if stype == 'float':

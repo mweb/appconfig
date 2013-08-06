@@ -24,5 +24,4 @@
 # THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-
-from appconfig import AppConfig, AppConfigValueException
+from .appconfig import AppConfig, AppConfigValueException, PY2

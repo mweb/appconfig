@@ -1,5 +1,4 @@
 import os
-import sys
 import multiprocessing
 
 from setuptools import setup, find_packages
@@ -7,10 +6,6 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
-
-extra = {}
-if sys.version_info >= (3, ):
-    extra['use_2to3'] = True
 
 requires = ['appdirs',
         ]
@@ -41,5 +36,4 @@ setup(name='appconfig',
         test_suite='nose.collector',
         packages=find_packages(),
         install_requires=requires,
-        tests_require=tests_requires,
-        **extra)
+        tests_require=tests_requires)
