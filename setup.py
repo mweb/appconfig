@@ -19,7 +19,7 @@ setup(name='appconfig',
         classifiers=[
             "Development Status :: 4 - Beta",
             "Intended Audience :: Developers",
-            "License :: BSD",
+            "License :: OSI Approved :: BSD License",
             "Operating System :: OS Independent",
             "Programming Language :: Python",
             "Programming Language :: Python :: 2",
